@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
 from ..models import Post
-from ..serializers import ImpromptuSerializer
+from ..serializers.post_serializer import PostSerializer
 
 class ImpromptuList(APIView):
     # permission_classes = [permissions.IsAuthenticated]
@@ -11,9 +11,10 @@ class ImpromptuList(APIView):
     # List all posts
     def get(self, request):
         posts = Post.objects.all()
-        serializer = ImpromptuSerializer(posts, many=True)
+        serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+    # Create a post
     def post(self, request):
         data = {
             'title': request.data.get("title"),
@@ -21,7 +22,7 @@ class ImpromptuList(APIView):
             'location': request.data.get("location")
         }
 
-        serializer = ImpromptuSerializer(data = data)
+        serializer = PostSerializer(data = data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
