@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework import permissions
 from ..models import Post
 from ..serializers.post_serializer import PostSerializer
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 class ImpromptuList(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated] # Only authenticated uses
 
     # List all posts
     def get(self, request):
@@ -16,15 +18,13 @@ class ImpromptuList(APIView):
     
     # Create a post
     def post(self, request):
-        data = {
-            'title': request.data.get("title"),
-            'description': request.data.get("description"),
-            'location': request.data.get("location")
-        }
-
-        serializer = PostSerializer(data = data)
+        serializer = PostSerializer(data = request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            try:
+                serializer.save(user=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

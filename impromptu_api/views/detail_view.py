@@ -4,19 +4,29 @@ from rest_framework import status
 from rest_framework import permissions
 from ..models import Post
 from ..serializers.post_serializer import PostSerializer
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 class ImpromptuDetail(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_post(self, pk):
+        try:
+            return Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Response({"message": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
 
     # Get specific post
     def get(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = self.get_post(pk)
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     # update a post
     def put(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = self.get_post(pk)
+        if post.user != request.user:
+            return Response({"message": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
         serializer = PostSerializer(post, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -26,6 +36,8 @@ class ImpromptuDetail(APIView):
     
     # delete a post
     def delete(self, request, pk):
-        post = Post.objects.get(pk=pk)
+        post = self.get_post(pk)
+        if post.user != request.user:
+            return Response({"message": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
