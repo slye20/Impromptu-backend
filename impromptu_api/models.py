@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Post(models.Model):
     title = models.CharField(max_length = 100)
-    description = models.TextField()
+    description = models.TextField(null=True)
     location = models.CharField(max_length = 180)
     timestamp = models.DateTimeField(auto_now_add = True, auto_now = False, blank = True)
     updated = models.DateTimeField(auto_now = True, blank = True)
