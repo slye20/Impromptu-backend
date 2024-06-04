@@ -8,6 +8,7 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add = True, auto_now = False, blank = True)
     updated = models.DateTimeField(auto_now = True, blank = True)
     user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True)
+    type = models.CharField(null = False)
 
     def __str__(self):
         return self.title

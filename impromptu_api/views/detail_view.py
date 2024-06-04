@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,7 +15,7 @@ class ImpromptuDetail(APIView):
         try:
             return Post.objects.get(pk=pk)
         except Post.DoesNotExist:
-            return Response({"message": "Post not found."}, status=status.HTTP_404_NOT_FOUND)
+            raise Http404("Post not found.")
 
     # Get specific post
     def get(self, request, pk):
