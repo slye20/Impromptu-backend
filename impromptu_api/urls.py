@@ -1,12 +1,14 @@
 # todo/todo/impromptu.py : Main urls.py
 from django.contrib import admin
-from django.urls import path, include
-from impromptu_api import urls as impromptu_urls
-from .views import (ImpromptuList)
+from django.urls import path
+from .views.list_view import (ImpromptuList)
+from .views.detail_view import (ImpromptuDetail)
+from .views.auth_view import login, signup
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
-    # path('api-auth/', include('rest_framework.urls')),
-    # path('impromptu/', include(impromptu_urls)),
-    path('api/', ImpromptuList.as_view(), name='impromptu-list')
+    path('admin/', admin.site.urls),
+    path('posts/', ImpromptuList.as_view(), name='post-list'),
+    path('posts/<int:pk>/', ImpromptuDetail.as_view(), name='post-detail'),
+    path('login/', login),
+    path('signup/', signup),
 ]
