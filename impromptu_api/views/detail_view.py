@@ -9,7 +9,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 
 class ImpromptuDetail(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_post(self, pk):
         try:
@@ -41,4 +41,4 @@ class ImpromptuDetail(APIView):
         if post.user != request.user:
             return Response({"message": "You do not have permission to update this post."}, status=status.HTTP_403_FORBIDDEN)
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_200_OK)

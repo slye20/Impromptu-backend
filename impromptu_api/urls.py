@@ -6,7 +6,6 @@ from .views.detail_view import (ImpromptuDetail)
 from .views.auth_view import login, signup
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('posts/', ImpromptuList.as_view(), name='post-list'),
     path('posts/<int:pk>/', ImpromptuDetail.as_view(), name='post-detail'),
     path('login/', login),

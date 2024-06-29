@@ -8,7 +8,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 
 class ImpromptuList(APIView):
     authentication_classes = [SessionAuthentication, TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated] # Only authenticated uses
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly] # Only authenticated uses
 
     # List all posts
     def get(self, request):
