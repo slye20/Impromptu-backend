@@ -148,7 +148,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # For production
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # Adjust the port if necessary
-    'https://impromptu-frontend-2j54.vercel.app',
+    'https://impromptu-frontend-2j54.vercel.app/',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
