@@ -35,6 +35,17 @@ class ImpromptuDetail(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    # Increment report_count
+    def patch(self, request, pk):
+        post = self.get_post(pk)
+        cur_count = post.report_count + 1
+        if cur_count >= 5:
+            post.delete()
+            return Response({"message": "Post has been deleted."}, status=status.HTTP_204_NO_CONTENT)
+        Post.objects.filter(pk=pk).update(report_count=post.report_count + 1)
+        return Response(status=status.HTTP_200_OK)
+
+    
     # delete a post
     def delete(self, request, pk):
         post = self.get_post(pk)

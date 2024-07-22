@@ -14,6 +14,9 @@ class Post(models.Model):
     date = models.DateTimeField(blank = False, null = False)
     timestamp = models.DateTimeField(auto_now_add = True, auto_now = False, blank = True)
     updated = models.DateTimeField(auto_now = True, blank = True)
+    longitude = models.FloatField(null = False)
+    latitude = models.FloatField(null = False)
+    report_count = models.IntegerField(default = 0)
 
     def __str__(self):
         return self.title
